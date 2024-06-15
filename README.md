@@ -21,3 +21,67 @@ Las faltas convivenciales tienen una fecha así como la asignatura en la que se 
 
 *Adjunto en el respositorio se encuentra el sql de la actividad.*
 
+**Creación de vistas**
+
+Una vez se suben los archivos a la base de datos, se generan vistas para ver el id_uniforme y la fecha según la asignatura
+
+CREATE VIEW vista_inasistencias_matematica AS
+SELECT IdFallasuniforme, Fecha, Materia
+FROM fallasuniforme
+WHERE Materia = 'Matemática';
+
+CREATE VIEW vista_inasistencias_ingles AS
+SELECT IdFallasuniforme, Fecha, Materia
+FROM fallasuniforme
+WHERE Materia = 'Ingles';
+
+**Creación de funciones**
+
+Se crea una función donde  según el número del ID se obtenga la fecha, la creación se realiza de la siguiente manera
+
+CREATE FUNCTION obtenerFechaInasistencia(Id INT)
+RETURNS VARCHAR(255)
+DETERMINISTIC
+BEGIN
+    DECLARE resultado VARCHAR(255);
+
+    SELECT Fecha INTO resultado
+    FROM Fallasuniforme
+    WHERE IdFallasuniforme = Id;
+
+    RETURN resultado;
+END
+
+y la siguiente función donde apartir del identificador se obtiene la materia
+
+CREATE FUNCTION obtenerMateriaInasistencia(Id INT)
+RETURNS VARCHAR(255)
+DETERMINISTIC
+BEGIN
+    DECLARE resultado VARCHAR(45);
+
+    SELECT Materia INTO resultado
+    FROM Fallasuniforme
+    WHERE IdFallasuniforme = Id;
+
+    RETURN resultado;
+END
+
+**Creación de procedimientos**
+
+A continuación se crea un procedimiento donde se insertan nuevos datos en la tabla:
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertarFallaUniforme`(
+  IN Id_u int8(255),
+  IN p_Fecha VARCHAR(255),
+   IN p_Materia VARCHAR(45))
+BEGIN
+
+    INSERT INTO fallasuniforme (IdFallasuniforme,Fecha, Materia)
+    VALUES (Id_u,p_Fecha, p_Materia);
+
+    -- Seleccionar un mensaje de confirmación
+    SELECT 'Registro insertado exitosamente' AS Mensaje;
+END
+
+
