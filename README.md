@@ -93,14 +93,13 @@ USE mydb;
 
 START TRANSACTION;
 
--- Definir un SAVEPOINT
+
 SAVEPOINT mi_savepoint;
 
--- Inserción de datos
+
 INSERT INTO evasiones (IdEvasiones, name, Materia)
 VALUES ('199', 'Alberto', 'Español');
 
--- Confirmar la transacción
 COMMIT;
--- Si ocurre algun error
+
 ROLLBACK TO mi_savepoint;
