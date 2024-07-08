@@ -85,3 +85,22 @@ BEGIN
 END
 
 
+**Creación de una transacción**
+
+A continuación se ingresa un valor en la base de datos en donde si le quitamos el commit no se vera reflejado en el mismo y si existe un error el ROLLBACK lo dejara como estaba y vuelve a dejar la base de datos en donde se creo el savepoint.
+
+USE mydb;
+
+START TRANSACTION;
+
+-- Definir un SAVEPOINT
+SAVEPOINT mi_savepoint;
+
+-- Inserción de datos
+INSERT INTO evasiones (IdEvasiones, name, Materia)
+VALUES ('199', 'Alberto', 'Español');
+
+-- Confirmar la transacción
+COMMIT;
+-- Si ocurre algun error
+ROLLBACK TO mi_savepoint;
